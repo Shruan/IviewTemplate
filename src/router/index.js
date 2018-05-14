@@ -9,6 +9,7 @@ import Error from '@/components/Error'
 import orderView from './orderView' // 模板管理
 import knowledgeBase from './knowledgeBase' // 模板管理
 import templateManage from './templateManage' // 模板管理
+import componentsTest from './componentsTest' // 组件测试库
 
 Vue.use(Router)
 
@@ -34,7 +35,8 @@ const router = new Router({
         },
         ...orderView,
         ...knowledgeBase,
-        ...templateManage
+        ...templateManage,
+        ...componentsTest
       ]
     }
   ]

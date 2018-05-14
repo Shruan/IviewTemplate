@@ -42,32 +42,28 @@ export default {
         icon: 'ios-list-outline',
         list: [
           {
-            name: '全部工单',
+            name: '列表页面模板',
             routerName: 'AllOrder'
           },
           {
-            name: '受理工单',
-            routerName: 'AllOrder'
+            name: '查看图片组件',
+            routerName: 'PicsCheck'
           },
           {
-            name: '指派工单',
-            routerName: 'AllOrder'
+            name: '地图选址组件',
+            routerName: 'AMapModal'
           },
           {
-            name: '异常工单',
-            routerName: 'AllOrder'
+            name: '图标选择组件',
+            routerName: 'IconSelect'
           },
           {
-            name: '回访工单',
-            routerName: 'AllOrder'
+            name: '上传图片组件',
+            routerName: 'UploadImg'
           },
           {
-            name: '抄送给我',
-            routerName: 'AllOrder'
-          },
-          {
-            name: '视图管理',
-            routerName: 'AllOrder'
+            name: '自定义表单',
+            routerName: 'CustomFiledForm'
           }
         ]
       }
