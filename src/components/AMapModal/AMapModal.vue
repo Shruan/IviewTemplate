@@ -1,12 +1,12 @@
 <template lang="html">
   <div class="">
     <Modal
+      title="选择地址"
       transfer
       scrollable
-      title="选择地址"
-      v-model="isShowModal"
       :width="920"
       :loading="madalLoading"
+      v-model="isShow"
       @on-ok="saveAddress">
       <div class="AMap">
         <div class="AMap-left">
@@ -18,8 +18,7 @@
               placeholder="请选择目标城市"
               v-model="selectCity"
               style="width: 260px; margin-bottom: 20px;"
-              @on-change="selectCityChange"
-            >
+              @on-change="selectCityChange">
               <Option
                 v-for="item in cityList"
                 :key="item.adcode"
@@ -38,11 +37,9 @@
           <div class="search-result">
             <ul>
               <li v-if="isClickMap"  class="addressList">{{nowAddress}}</li>
-              <li
-                :class="{'addressList': true, 'address-active': index === nowClickIndex}"
+              <li :class="{'addressList': true, 'address-active': index === nowClickIndex}"
                 v-for="(item, index) in searchResult"
-                @click="clickAddress(item, index)"
-              >
+                @click="clickAddress(item, index)">
                 <p class="name">{{item.name}}</p>
                 <p class="address">{{item.address}}</p>
               </li>
@@ -70,7 +67,7 @@ export default {
       type: String,
       required: true
     },
-    isShowMapModal: {
+    value: {
       type: Boolean,
       required: true
     },
@@ -83,12 +80,11 @@ export default {
       required: true
     }
   },
-  components: {
-  },
+  components: {},
   data () {
     return {
       nowClickIndex: 0,
-      isShowModal: false,
+      isShow: false,
       madalLoading: true,
       center: [118.180987, 24.486432],
       nowAddress: '',
@@ -112,7 +108,7 @@ export default {
         }
       }
     },
-    isShowMapModal (val) {
+    value (val) {
       if (val) {
         if (!this.centerPositon) {
           this.getCenterPosition()
@@ -123,15 +119,15 @@ export default {
         }
         this.loadmap()   // 加载地图和相关组件
       }
-      this.isShowModal = val
+      this.isShow = val
     },
-    isShowModal (val) {
-      this.$emit('is-show-on-change', val)
+    isShow (val) {
+      this.$emit('input', val)
     }
   },
   methods: {
     getCenterPosition () {
-      let url = 'https://restapi.amap.com/v3/ip?ip=&output=xml&key=43202ac9c4bbbe5ef5d65478de3617be'
+      let url = 'https://restapi.amap.com/v3/ip?ip=&output=xml&key=cfa87b97f9be63bbe53fac563524f28b'
       this.$http.post(url).then(res => {
         let rectangle = res.rectangle.split(';')
         let position1 = rectangle[0].split(',')
@@ -153,7 +149,7 @@ export default {
       data.position = this.center
       if (data.address && data.position.length === 2) {
         this.$emit('select-address', data)
-        this.isShowModal = false
+        this.isShow = false
       } else {
         this.$Message.warning('请选择地址后再试')
       }
@@ -281,7 +277,7 @@ export default {
     }
   },
   created () {
-    this.isShowModal = this.isShowMapModal
+    this.isShow = this.value
     this.$http.get('/area/list?pid=1').then(res => {
       this.cityList = res.data
     })
@@ -291,25 +287,23 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="css" scoped>
   .search-result {
     width: 300px;
     height: 349px;;
     font-size: 14px;
     color: #80848F;
-
-    ul {
-      overflow-x: hidden;
-      height: 349px;
-      box-sizing: border-box;
-
-      li {
-        padding: 10px;
-        line-height: 30px;
-        border-bottom: 1px solid #ededed;
-        cursor: pointer;
-      }
-    }
+  }
+  .search-result ul {
+    overflow-x: hidden;
+    height: 349px;
+    box-sizing: border-box;
+  }
+  .search-result ul li {
+    padding: 10px;
+    line-height: 30px;
+    border-bottom: 1px solid #ededed;
+    cursor: pointer;
   }
   .Amap-search {
     height: 120px;
@@ -319,14 +313,17 @@ export default {
     align-items: center;
     border-bottom: 1px solid #ededed;
   }
+
   .mymap {
     width: 620px;
     height: 450px;
     overflow: hidden;
   }
+
   .AMap-left {
     align-self: stretch;
   }
+
   .AMap {
     height: 450px;
     display: flex;
@@ -334,16 +331,15 @@ export default {
     align-items: center;
     overflow: hidden;
   }
+
   .addressList {
     min-height: 80px;
-
-    .name {
-      font-size: 14px;
-    }
-
-    .address {
-      font-size: 12px;
-    }
+  }
+  .addressList .name {
+    font-size: 14px;
+  }
+  .addressList .address {
+    font-size: 12px;
   }
   .address-active {
     color: #3ccba6;
