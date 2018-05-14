@@ -104,9 +104,7 @@ export default {
     selectIcon (id, color) {
       this.logo = `${this.logoPrefix}/template-${id}-${color}.png`
     },
-    handleBeforeUpload () {
-
-    },
+    handleBeforeUpload () {},
     handleFormatError (file) {
       this.$Message.error('文件格式不支持')
     },
