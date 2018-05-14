@@ -3,7 +3,7 @@
     <Modal
       @on-visible-change="$emit('input', $event)"
       v-model="isShow"
-      title="图标编辑"
+      :title="title"
       :width="700"
       :loading="loading"
       @on-ok="submit">
@@ -19,6 +19,7 @@
             </div>
             <Upload
               ref="upload"
+              action="/upload/save"
               :show-upload-list="false"
               :on-success="handleSuccess"
               :on-error="handleError"
@@ -26,13 +27,12 @@
               :max-size="1024"
               :on-format-error="handleFormatError"
               :on-exceeded-size="handleMaxSize"
-              :before-upload="handleBeforeUpload"
-              action="/upload/save">
-            <Button type="ghost" icon="ios-cloud-upload-outline">上传图片</Button>
-          </Upload>
+              :before-upload="handleBeforeUpload">
+              <Button type="ghost" icon="ios-cloud-upload-outline">上传图片</Button>
+            </Upload>
           </div>
         </div>
-        <label class="label">选择单小二提供的图标库来美化您的{{tipLabel}}</label>
+        <label class="label">选择我们提供的图标库来美化您的{{tipLabel}}</label>
         <Tabs type="card">
           <TabPane label="行业通用" class="modal-tabs">
             <p>行业通用 - 扁平化圆角图标</p>
@@ -71,13 +71,17 @@ export default {
     tipLabel: {
       type: String,
       default: '企业门户'
+    },
+    title: {
+      type: String,
+      default: '选择图标'
     }
   },
   data () {
     return {
       loading: true,
       isShow: false,
-      logoPrefix: '/spa_static/templateIcon',
+      logoPrefix: '/static/templateIcon',
       logo: '',
       iconList: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       current: 1
