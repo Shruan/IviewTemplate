@@ -15,9 +15,9 @@ axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? 'https://zhongy
 // axios.defaults.baseURL = '/api/'
 // 请求过滤器
 axios.interceptors.request.use(config => {
-  if (Object.keys(store.state.user.user).length) {
-    config.headers['X-USER-ID'] = store.state.globalModule.user.id
-    config.headers['X-TOEKN'] = store.state.globalModule.user.token
+  if (store.state.user && Object.keys(store.state.user.user).length > 0) {
+    config.headers['X-USER-ID'] = store.state.user.user.id
+    config.headers['X-TOEKN'] = store.state.user.user.token
   }
   return config
 }, error => {
@@ -30,17 +30,19 @@ axios.interceptors.response.use(res => {
       return res
   }
 }, err => {
-  switch (err.response.status) {
-    case 404:
-      console.log('404 err')
-      router.push({name: 'Error'})
-      break
-    case 500:
-      console.log('500 err')
-      router.push({name: 'Error'})
-      break
-    default:
-      console.log('unknow err')
+  if (err.response) {
+    switch (err.response.status) {
+      case 404:
+        console.log('404 err')
+        router.push({name: 'Error'})
+        break
+      case 500:
+        console.log('500 err')
+        router.push({name: 'Error'})
+        break
+      default:
+        console.log('unknow err')
+    }
   }
   return Promise.reject(err)
 })
