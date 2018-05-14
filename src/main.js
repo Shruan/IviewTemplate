@@ -13,6 +13,17 @@ Vue.use(iView)
 
 axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? 'https://zhongyifu.hz.taeapp.com/' : '/api/'
 // axios.defaults.baseURL = '/api/'
+// 请求过滤器
+axios.interceptors.request.use(config => {
+  if (Object.keys(store.state.user.user).length) {
+    config.headers['X-USER-ID'] = store.state.globalModule.user.id
+    config.headers['X-TOEKN'] = store.state.globalModule.user.token
+  }
+  return config
+}, error => {
+  return Promise.reject(error)
+})
+// 响应过滤器
 axios.interceptors.response.use(res => {
   switch (res.data.code) {
     case '200':
