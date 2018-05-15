@@ -1,5 +1,6 @@
 import Index from '@/components'
 import PicsCheck from '@/pages/componentsTest/picsCheck'
+import AMapModal from '@/pages/componentsTest/aMapModal'
 
 export default [
   {
@@ -11,7 +12,19 @@ export default [
         path: '/picsCheck',
         name: 'PicsCheck',
         component: PicsCheck,
-        meta: { name: '查看图片' }
+        meta: {
+          name: '查看图片',
+          tag: true
+        }
+      },
+      {
+        path: '/aMapModal',
+        name: 'AMapModal',
+        component: AMapModal,
+        meta: {
+          name: '地图选址',
+          tag: true
+        }
       }
     ]
   }

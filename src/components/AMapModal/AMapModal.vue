@@ -73,7 +73,9 @@ export default {
     },
     centerPositon: {
       type: Array,
-      default: [118.180987, 24.486432]
+      default: function () {
+        return []
+      }
     },
     panelId: {
       type: String,
@@ -84,7 +86,7 @@ export default {
   data () {
     return {
       nowClickIndex: 0,
-      isShow: false,
+      isShow: this.value,
       madalLoading: true,
       center: [118.180987, 24.486432],
       nowAddress: '',
@@ -148,7 +150,7 @@ export default {
       data.address = this.nowAddress
       data.position = this.center
       if (data.address && data.position.length === 2) {
-        this.$emit('select-address', data)
+        this.$emit('on-ok', data)
         this.isShow = false
       } else {
         this.$Message.warning('请选择地址后再试')
@@ -277,9 +279,10 @@ export default {
     }
   },
   created () {
-    this.isShow = this.value
     this.$http.get('/area/list?pid=1').then(res => {
-      this.cityList = res.data
+      if (res.data) {
+        this.cityList = res.data
+      }
     })
   },
   mounted () {
