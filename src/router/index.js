@@ -56,20 +56,22 @@ router.beforeEach((to, from, next) => {
   // 回退或前进时根据url设置选中标签
   let rootPath = to.fullPath.split('/')[1]
   if (rootPath === 'index') {
-    store.commit('menu/_tag', '-1')
+    store.commit('menu/_tag', 'Index')
   } else {
-    var secondMenuList = store.state.menu.secondMenuList
-    for (var i = 0; i < secondMenuList.length; i++) {
-      for (var j = 0; j < secondMenuList[i].length; j++) {
-        for (var k = 0; k < secondMenuList[i][j].list.length; k++) {
-          let routerName = secondMenuList[i][j].list[k].routerName
-          routerName = routerName[0].toLowerCase() + routerName.substring(1)
-          if (routerName === rootPath) {
-            store.commit('menu/_tag', i + '-' + j + '-' + k)
-          }
-        }
-      }
-    }
+    store.dispatch('menu/_AddTag', to)
+    // store.dispatch('menu/_AddTag', to)
+    // var secondMenuList = store.state.menu.secondMenuList
+    // for (var i = 0; i < secondMenuList.length; i++) {
+    //   for (var j = 0; j < secondMenuList[i].length; j++) {
+    //     for (var k = 0; k < secondMenuList[i][j].list.length; k++) {
+    //       let routerName = secondMenuList[i][j].list[k].routerName
+    //       routerName = routerName[0].toLowerCase() + routerName.substring(1)
+    //       if (routerName === rootPath) {
+    //         store.commit('menu/_tag', i + '-' + j + '-' + k)
+    //       }
+    //     }
+    //   }
+    // }
   }
 })
 

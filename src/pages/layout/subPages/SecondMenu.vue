@@ -32,7 +32,7 @@
               </span>
             </template>
             <MenuItem
-              :name="firstMenu + '-' + index + '-' + i"
+              :name="item.routerName"
               v-for="(item, i) in menu.list"
               :key="item.name"
             >
@@ -94,7 +94,8 @@ export default {
       '_AddTag'
     ]),
     onSelect (name) {
-      this._AddTag(name)
+      this.$router.push({ name: name })
+      // this._AddTag(name)
     }
   }
 }

@@ -4,13 +4,15 @@ import menuList from './menuList'
 const namespace = 'menu'
 $$.setNamespace(namespace)
 
+const homeTag = { routerName: 'Index', label: '首页' }  // 首页页签
+
 const state = {
   // 一级菜单列表
   firstMenuList: menuList.firstMenuList,
   // 二级菜单列表
   secondMenuList: menuList.secondMenuList,
   // 标签列表
-  tagList: $$.get(namespace + '/tagList') || ['-1'],
+  tagList: $$.get(namespace + '/tagList') || [homeTag],
   // 面包屑
   breadcrumbList: $$.get(namespace + '/breadcrumbList') || [],
   // 选中的一级菜单名称（即下标）
@@ -18,7 +20,7 @@ const state = {
   // 选中的二级菜单名称（形式为0-0）
   // secondMenu: $$.get(namespace + '/secondMenu') || 0,
   // 选中的标签名称（形式为0-0-0）
-  tag: $$.get(namespace + '/tag') || '-1',
+  tag: $$.get(namespace + '/tag') || homeTag.routerName,
   // 是否显示
   isVisibleSecondMenu: $$.get(namespace + '/isVisibleSecondMenu') !== ''
   ? $$.get(namespace + '/isVisibleSecondMenu') : true
@@ -47,57 +49,44 @@ const mutations = {
 
 const actions = {
   // 添加一个标签并选中
-  _AddTag ({ commit, state }, value) {
-    let tagList = state.tagList
-    let index = tagList.length
-    // 查询标签是否已存在
-    for (var i = 0; i < tagList.length; i++) {
-      if (value === tagList[i]) {
-        index = i
+  _AddTag ({ commit, state }, data) {
+    // 菜单为标签时添加tag
+    if (data.meta.tag) {
+      let tag = {
+        routerName: data.name,
+        label: data.meta.name
       }
+      let tagList = state.tagList
+      // 查询标签是否已存在
+      if (!tagList.some(item => item.routerName === tag.routerName)) {
+        tagList.push(tag)
+        commit('_tagList', tagList)
+      }
+      commit('_tag', tag.routerName)
     }
-    if (index === tagList.length) {
-      tagList.push(value)
-      commit('_tagList', tagList)
-    }
-    commit('_tag', value)
   },
   // 删除一个标签并设置选中规则
   _DelTag ({ commit, state }, value) {
-    let tagList = state.tagList
-    let index // 当前选中的tag下标
-    for (let i = 0; i < tagList.length; i++) {
-      if (state.tag === tagList[i]) {
-        index = i
-      }
-    }
-    // 查询标签是否已存在
-    for (let i = 0; i < tagList.length; i++) {
-      if (value === tagList[i]) {
-        tagList.splice(i, 1)
-        commit('_tagList', tagList)
-        // 若删除在选中的左侧 则选择 已选中的前一个
-        if (i < index) {
-          commit('_tag', tagList[index - 1])
-        } else if (i === index) {
-          // 若删除的即是选中的
-          if (index === tagList.length) {
-            commit('_tag', tagList[index - 1])
-          } else {
-            commit('_tag', tagList[index])
-          }
+    // 关闭选中的标签
+    let tagList = state.tagList.filter(item => {
+      return [value].indexOf(item.routerName) === -1
+    })
+    if (value === state.tag) {
+      let index // 当前选中的tag下标
+      for (let i = 0; i < state.tagList.length; i++) {
+        if (state.tag === state.tagList[i].routerName) {
+          index = i
         }
       }
+      // 若删除的即是选中的
+      commit('_tag', state.tagList[index - 1].routerName)
     }
+    commit('_tagList', tagList)
   },
   // 关闭所有标签
   _DelAllTag ({ commit, state }, value) {
-    let tagList = state.tagList.filter((val) => {
-      return val === '-1'
-    })
-    // commit('_firstMenu', 1)
-    commit('_tagList', tagList)
-    commit('_tag', tagList[0])
+    commit('_tagList', [homeTag])
+    commit('_tag', homeTag.routerName)
   },
   // 关闭左侧标签
   _DelLeftTag ({ commit, state }, value) {
@@ -128,9 +117,8 @@ const actions = {
   },
   // 关闭其他标签
   _DelOhterTag ({ commit, state }, value) {
-    let tag = state.tag
-    let tagList = state.tagList.filter((val) => {
-      return val === '-1' || val === tag
+    let tagList = state.tagList.filter(item => {
+      return [homeTag.routerName, state.tag].indexOf(item.routerName) !== -1
     })
     commit('_tagList', tagList)
   }

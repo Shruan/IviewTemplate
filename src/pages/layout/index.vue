@@ -22,7 +22,7 @@ import FirstMenu from './subPages/FirstMenu'
 import SecondMenu from './subPages/SecondMenu'
 import HeadNav from './subPages/HeadNav'
 import HeadTags from './subPages/HeadTags'
-import { mapState, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -50,18 +50,12 @@ export default {
     },
     // 监听选中的标签，进行页面跳转
     tag (val) {
-      if (val === '-1') {
-        this.$router.push({name: 'Index'})
-      } else {
-        let tagName = val.split('-')
-        let routerName = this.secondMenuList[tagName[0]][tagName[1]].list[tagName[2]].routerName
-        this.$router.push({name: routerName})
+      if (this.$route.name !== val) {
+        setTimeout(() => { this.$router.push({ name: this.tag }) }, 100)
       }
     }
   },
-  methods: {
-    ...mapMutations('menu', [])
-  }
+  methods: {}
 }
 </script>
 

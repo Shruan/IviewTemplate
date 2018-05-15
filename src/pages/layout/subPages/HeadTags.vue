@@ -7,20 +7,20 @@
           type="dot"
           class="tag"
           ref="tagsPageOpened"
-          :name="tagName"
+          :name="tagName.routerName"
           v-for="(tagName, index) in tagList"
-          :key="tagName"
-          :color="tagName == tag ? 'green' : 'default'"
-          :closable="tagName != -1"
+          :key="tagName.routerName"
+          :color="tagName.routerName == tag ? 'green' : 'default'"
+          :closable="tagName.routerName != 'Index'"
           @on-close="closeTag"
           >
         <span
-          @click.stop="_tag(tagName)"
+          @click.stop="$router.push({ name: tagName.routerName })"
           class="tagName"
         ></span>
         <!-- <template v-if="tagName == -1">首页</template>
         <template v-else>{{tagName}}</template> -->
-        {{getRealTagName(tagName)}}
+          {{tagName.label}}
         </Tag>
       </div>
     </div>
@@ -96,13 +96,13 @@ export default {
       }
     },
     // 获取标签的二级菜单真实名称
-    getRealTagName (tagName) {
-      if (parseInt(tagName) === -1) {
-        return '首页'
-      }
-      tagName = tagName.split('-')
-      return this.secondMenuList[tagName[0]][tagName[1]].list[tagName[2]].name
-    },
+    // getRealTagName (tagName) {
+    //   if (parseInt(tagName) === -1) {
+    //     return '首页'
+    //   }
+    //   tagName = tagName.split('-')
+    //   return this.secondMenuList[tagName[0]][tagName[1]].list[tagName[2]].name
+    // },
     // 关闭标签时 可视区域位置
     tagCloseMove () {
       setTimeout(() => {
