@@ -25,9 +25,9 @@ axios.interceptors.request.use(config => {
 })
 // 响应过滤器
 axios.interceptors.response.use(res => {
-  switch (res.data.code) {
-    case '200':
-      return res
+  switch (res.status) {
+    case 200:
+      return res.data
   }
 }, err => {
   if (err.response) {
