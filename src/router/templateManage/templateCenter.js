@@ -11,7 +11,10 @@ export default [
       {
         path: '/templateCenter',
         name: 'TemplateCenter',
-        component: TemplateCenter
+        component: TemplateCenter,
+        meta: {
+          name: '模板中心', tag: true
+        }
       },
       {
         path: '/templateCenter/processSetting',

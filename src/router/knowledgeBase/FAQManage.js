@@ -10,7 +10,11 @@ export default [
       {
         path: '/FAQManage',
         name: 'FAQManage',
-        component: FAQManage
+        component: FAQManage,
+        meta: {
+          name: 'FAQ管理',
+          tag: true
+        }
       }
     ]
   }

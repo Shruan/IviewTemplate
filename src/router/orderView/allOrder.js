@@ -10,7 +10,11 @@ export default [
       {
         path: '/allOrder',
         name: 'AllOrder',
-        component: AllOrder
+        component: AllOrder,
+        meta: {
+          name: '全部工单',
+          tag: true
+        }
       }
     ]
   }
